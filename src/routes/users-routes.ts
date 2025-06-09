@@ -30,6 +30,33 @@ export function usersRoutes(app: FastifyInstance) {
       return reply.status(401).send({ message: 'Invalid credentials' })
     }
 
-    return reply.status(200).send({ user })
+    const token = await reply.jwtSign(
+      {},
+      {
+        sign: {
+          sub: user.id,
+        },
+      },
+    )
+
+    const refreshToken = await reply.jwtSign(
+      {},
+      {
+        sign: {
+          sub: user.id,
+          expiresIn: '7d',
+        },
+      },
+    )
+
+    return reply
+      .setCookie('refreshtoken', refreshToken, {
+        path: '/',
+        secure: true,
+        httpOnly: true,
+        sameSite: true,
+      })
+      .status(200)
+      .send({ token })
   })
 }
