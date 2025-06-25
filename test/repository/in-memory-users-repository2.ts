@@ -1,8 +1,19 @@
 import { IUsersRepository } from '@/repositories/contracts/i-users-repository'
+import { UUID } from 'crypto'
 import { User } from 'knex/types/tables'
 
 export class InMemoryUsersRepository implements IUsersRepository {
   private users: User[] = []
+
+  async findById(id: UUID): Promise<User | null> {
+    const user = this.users.find((user) => user.id === id)
+
+    if (!user) {
+      return null
+    }
+
+    return user
+  }
 
   async findByEmail(email: string): Promise<User | null> {
     const user = this.users.find((user) => user.email === email)
