@@ -42,7 +42,7 @@ describe('Authenticate Use Case', () => {
       password: '123456',
     })
 
-    expect(() =>
+    await expect(() =>
       sut.excute({
         email: 'wrong-email@example.com',
         password: '123456',
@@ -57,7 +57,7 @@ describe('Authenticate Use Case', () => {
       password: '123456',
     })
 
-    expect(() =>
+    await expect(() =>
       sut.excute({
         email: 'johndoe@example.com',
         password: 'wrong-password',
@@ -66,7 +66,7 @@ describe('Authenticate Use Case', () => {
   })
 
   it('should be not able to authenticate when user not exists', async () => {
-    expect(() =>
+    await expect(() =>
       sut.excute({
         email: 'johndoe@example.com',
         password: '123456',
