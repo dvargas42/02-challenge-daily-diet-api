@@ -11,5 +11,7 @@ export type MealParams = {
 }
 
 export interface IMealsRepository {
+  findByUserId(userId: string, page: number, pageSize: number): Promise<Meal[]>
+  countByUserId(userId: string): Promise<number>
   create(data: MealParams): Promise<Meal>
 }
