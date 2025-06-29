@@ -28,9 +28,11 @@ export type MealSaveParams = {
 }
 
 export interface IMealsRepository {
-  findByIdAndUserId(id: string, userId: string): Promise<MealEntity | null>
   findByUserId(data: FindByUserIdParams): Promise<MealEntity[]>
+  findByIdAndUserId(id: string, userId: string): Promise<MealEntity | null>
+  findByUserIdOrderByDateDescAndHourDesc(userId: UUID): Promise<MealEntity[]>
   countByUserId(userId: string): Promise<number>
+  countByUserIdAndIsInDiet(userId: UUID, isInDiet: boolean): Promise<number>
   create(data: CreateParams): Promise<MealEntity>
   save(data: MealSaveParams): Promise<MealEntity>
   delete(id: UUID, userId: UUID): Promise<void>

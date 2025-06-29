@@ -12,6 +12,20 @@ import {
 export class InMemoryMealsRepository implements IMealsRepository {
   private meals: Meal[] = []
 
+  async findByUserId({
+    userId,
+    page,
+    pageSize,
+  }: FindByUserIdParams): Promise<MealEntity[]> {
+    const mealsFound = this.meals
+      .filter((meal) => meal.user_id === userId)
+      .slice((page - 1) * pageSize, page * pageSize)
+
+    return mealsFound.map((meal) => {
+      return MealEntity.fromDatabase(meal)
+    })
+  }
+
   async findByIdAndUserId(
     id: string,
     userId: string,
@@ -27,24 +41,34 @@ export class InMemoryMealsRepository implements IMealsRepository {
     return MealEntity.fromDatabase(meal)
   }
 
-  async findByUserId({
-    userId,
-    page,
-    pageSize,
-  }: FindByUserIdParams): Promise<MealEntity[]> {
-    const mealsFound = this.meals
+  async findByUserIdOrderByDateDescAndHourDesc(
+    userId: UUID,
+  ): Promise<MealEntity[]> {
+    const meals = this.meals
       .filter((meal) => meal.user_id === userId)
-      .slice((page - 1) * pageSize, page * pageSize)
-
-    return mealsFound.map((meal) => {
-      return MealEntity.fromDatabase(meal)
-    })
+      .sort((a, b) => {
+        if (a.date !== b.date) {
+          return b.date.localeCompare(a.date)
+        }
+        return b.hour.localeCompare(a.hour)
+      })
+    return meals.map((meal) => MealEntity.fromDatabase(meal))
   }
 
-  async countByUserId(id: string): Promise<number> {
-    const mealFiltered = this.meals.filter((meal) => meal.user_id === id)
+  async countByUserId(userId: string): Promise<number> {
+    const mealFiltered = this.meals.filter((meal) => meal.user_id === userId)
 
     return mealFiltered.length
+  }
+
+  async countByUserIdAndIsInDiet(
+    userId: UUID,
+    isInDiet: boolean,
+  ): Promise<number> {
+    const filteredMeals = this.meals.filter(
+      (meal) => meal.user_id === userId && meal.is_in_diet === isInDiet,
+    )
+    return filteredMeals.length
   }
 
   async create(data: CreateParams): Promise<MealEntity> {
