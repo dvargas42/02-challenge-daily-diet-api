@@ -1,5 +1,6 @@
 import { MealEntity } from '@/entities/meal-entity'
 import {
+  FindByUserIdParams,
   IMealsRepository,
   MealParams,
   MealSaveParams,
@@ -25,16 +26,18 @@ export class InMemoryMealsRepository implements IMealsRepository {
     return MealEntity.fromDatabase(meal)
   }
 
-  async findByUserId(
-    userId: string,
-    page: number,
-    pageSize: number,
-  ): Promise<Meal[]> {
-    const mealFound = this.meals
+  async findByUserId({
+    userId,
+    page,
+    pageSize,
+  }: FindByUserIdParams): Promise<MealEntity[]> {
+    const mealsFound = this.meals
       .filter((meal) => meal.user_id === userId)
       .slice((page - 1) * pageSize, page * pageSize)
 
-    return mealFound
+    return mealsFound.map((meal) => {
+      return MealEntity.fromDatabase(meal)
+    })
   }
 
   async countByUserId(id: string): Promise<number> {

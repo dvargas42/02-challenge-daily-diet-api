@@ -1,14 +1,16 @@
 import { beforeEach, describe, expect, it } from 'vitest'
+import { UUID } from 'node:crypto'
 
 import { CreateMealUseCase } from '@/use-cases/create-meal-use-case'
 import { CreateUserUseCase } from '@/use-cases/create-user-use-case'
 import { GetAllMealsUseCase } from '@/use-cases/get-all-meals-use-case'
 
-import { ResourceNotFoundError } from '@/errors/resource-not-found-error'
 import { IMealsRepository } from '@/repositories/contracts/i-meals.repository'
 import { IUsersRepository } from '@/repositories/contracts/i-users-repository'
 import { InMemoryMealsRepository } from 'test/repository/in-memory-meals-repository'
 import { InMemoryUsersRepository } from 'test/repository/in-memory-users-repository2'
+
+import { ResourceNotFoundError } from '@/errors/resource-not-found-error'
 
 let mealsRepository: IMealsRepository
 let usersRepository: IUsersRepository
@@ -62,11 +64,9 @@ describe('Get All Meals Use Case', () => {
   })
 
   it('should not be able to get when userId is invalid', async () => {
-    const INVALID_USER_ID = 'f0dfdc53-23a2-42c7-9b9a-c2438fb066b1'
-
     await expect(() =>
       sut.execute({
-        userId: INVALID_USER_ID,
+        userId: 'invalid-user-id' as UUID,
         page: 1,
         pageSize: 20,
       }),
