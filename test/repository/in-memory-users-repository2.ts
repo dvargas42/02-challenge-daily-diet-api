@@ -9,24 +9,24 @@ import { User } from 'knex/types/tables'
 export class InMemoryUsersRepository implements IUsersRepository {
   private users: User[] = []
 
-  async findById(id: UUID): Promise<User | null> {
+  async findById(id: UUID): Promise<UserEntity | null> {
     const user = this.users.find((user) => user.id === id)
 
     if (!user) {
       return null
     }
 
-    return user
+    return UserEntity.fromDatabase(user)
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<UserEntity | null> {
     const user = this.users.find((user) => user.email === email)
 
     if (!user) {
       return null
     }
 
-    return user
+    return UserEntity.fromDatabase(user)
   }
 
   async create({ email, name, password }: CreateParams): Promise<UserEntity> {

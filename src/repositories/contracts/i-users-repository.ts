@@ -1,6 +1,6 @@
-import { UserEntity } from '@/entities/user-entity'
-import { User } from 'knex/types/tables'
 import type { UUID } from 'node:crypto'
+
+import { UserEntity } from '@/entities/user-entity'
 
 export type CreateParams = {
   name: string
@@ -10,6 +10,6 @@ export type CreateParams = {
 
 export interface IUsersRepository {
   findById(id: UUID): Promise<UserEntity | null>
-  findByEmail(email: string): Promise<User | null>
+  findByEmail(email: string): Promise<UserEntity | null>
   create(data: CreateParams): Promise<UserEntity>
 }
