@@ -23,10 +23,10 @@ export class CreateUserUseCase {
     email,
     password,
   }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
-    const doesTheUserAlreadyExist =
+    const doesTheEmailAlreadyExist =
       await this.usersRepository.findByEmail(email)
 
-    if (!doesTheUserAlreadyExist) {
+    if (doesTheEmailAlreadyExist) {
       throw new EmailAlreadyExistsError()
     }
 
