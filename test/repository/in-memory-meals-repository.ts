@@ -8,6 +8,18 @@ import { randomUUID } from 'node:crypto'
 export class InMemoryMealsRepository implements IMealsRepository {
   private meals: Meal[] = []
 
+  async findByIdAndUserId(id: string, userId: string): Promise<Meal | null> {
+    const meal = this.meals.find(
+      (meal) => meal.id === id && meal.user_id === userId,
+    )
+
+    if (!meal) {
+      return null
+    }
+
+    return meal
+  }
+
   async findByUserId(
     userId: string,
     page: number,
