@@ -35,8 +35,8 @@ describe('Get Meal Use Case', () => {
         description: 'Anything description...',
         date: '2025-06-01',
         hour: '00:59',
-        is_in_diet: true,
-        user_id: 'user-id' as UUID,
+        isInDiet: true,
+        userId: 'user-id' as UUID,
       }),
     )
   })

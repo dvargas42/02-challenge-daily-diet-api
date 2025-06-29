@@ -22,7 +22,7 @@ export type MealSaveParams = {
 }
 
 export interface IMealsRepository {
-  findByIdAndUserId(id: string, userId: string): Promise<Meal | null>
+  findByIdAndUserId(id: string, userId: string): Promise<MealEntity | null>
   findByUserId(userId: string, page: number, pageSize: number): Promise<Meal[]>
   countByUserId(userId: string): Promise<number>
   create(data: MealParams): Promise<Meal>
