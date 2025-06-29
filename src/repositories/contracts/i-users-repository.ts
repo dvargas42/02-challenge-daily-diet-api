@@ -9,7 +9,7 @@ export type CreateParams = {
 }
 
 export interface IUsersRepository {
-  findById(id: UUID): Promise<User | null>
+  findById(id: UUID): Promise<UserEntity | null>
   findByEmail(email: string): Promise<User | null>
   create(data: CreateParams): Promise<UserEntity>
 }

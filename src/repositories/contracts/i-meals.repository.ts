@@ -1,6 +1,6 @@
-import { MealEntity } from '@/entities/meal-entity'
-import { Meal } from 'knex/types/tables'
 import type { UUID } from 'node:crypto'
+
+import { MealEntity } from '@/entities/meal-entity'
 
 export type FindByUserIdParams = {
   userId: string
@@ -8,13 +8,13 @@ export type FindByUserIdParams = {
   pageSize: number
 }
 
-export type MealParams = {
+export type CreateParams = {
   name: string
   description: string
   date: string
   hour: string
-  is_in_diet: boolean
-  user_id: UUID
+  isInDiet: boolean
+  userId: UUID
 }
 
 export type MealSaveParams = {
@@ -31,6 +31,6 @@ export interface IMealsRepository {
   findByIdAndUserId(id: string, userId: string): Promise<MealEntity | null>
   findByUserId(data: FindByUserIdParams): Promise<MealEntity[]>
   countByUserId(userId: string): Promise<number>
-  create(data: MealParams): Promise<Meal>
+  create(data: CreateParams): Promise<MealEntity>
   save(data: MealSaveParams): Promise<MealEntity>
 }

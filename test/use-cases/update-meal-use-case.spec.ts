@@ -20,8 +20,8 @@ describe('Update Meal Use Case', () => {
       description: 'Salad caesar...',
       date: '2026-06-01',
       hour: '10:10',
-      is_in_diet: true,
-      user_id: 'user-id' as UUID,
+      isInDiet: true,
+      userId: 'user-id' as UUID,
     })
 
     const { meal } = await sut.execute({

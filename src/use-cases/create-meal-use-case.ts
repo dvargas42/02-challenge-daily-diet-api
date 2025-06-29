@@ -1,10 +1,10 @@
+import type { UUID } from 'node:crypto'
+
 import { ResourceNotFoundError } from '@/errors/resource-not-found-error'
 import { IMealsRepository } from '@/repositories/contracts/i-meals.repository'
 import { IUsersRepository } from '@/repositories/contracts/i-users-repository'
-import { Meal } from 'knex/types/tables'
-import type { UUID } from 'node:crypto'
 
-type CreateMealUseCaseRequest = {
+type CreateMealInput = {
   name: string
   description: string
   date: string
@@ -13,8 +13,15 @@ type CreateMealUseCaseRequest = {
   userId: UUID
 }
 
-type CreateMealsUseCaseResponse = {
-  meal: Meal
+type CreateMealsOutput = {
+  meal: {
+    id: UUID
+    name: string
+    description: string
+    date: string
+    hour: string
+    isInDiet: boolean
+  }
 }
 
 export class CreateMealUseCase {
@@ -23,29 +30,24 @@ export class CreateMealUseCase {
     private usersRepository: IUsersRepository,
   ) {}
 
-  async execute({
-    name,
-    description,
-    date,
-    hour,
-    isInDiet,
-    userId,
-  }: CreateMealUseCaseRequest): Promise<CreateMealsUseCaseResponse> {
-    const user = await this.usersRepository.findById(userId)
+  async execute(data: CreateMealInput): Promise<CreateMealsOutput> {
+    const user = await this.usersRepository.findById(data.userId)
 
     if (!user) {
       throw new ResourceNotFoundError()
     }
 
-    const meal = await this.mealsRepository.create({
-      name,
-      description,
-      date,
-      hour,
-      is_in_diet: isInDiet,
-      user_id: user.id,
-    })
+    const meal = await this.mealsRepository.create(data)
 
-    return { meal }
+    return {
+      meal: {
+        id: meal.id,
+        name: meal.name,
+        description: meal.description,
+        date: meal.date,
+        hour: meal.hour,
+        isInDiet: meal.isInDiet,
+      },
+    }
   }
 }
