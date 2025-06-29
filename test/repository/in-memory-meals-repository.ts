@@ -1,3 +1,6 @@
+import { UUID, randomUUID } from 'node:crypto'
+
+import { Meal } from 'knex/types/tables'
 import { MealEntity } from '@/entities/meal-entity'
 import {
   CreateParams,
@@ -5,8 +8,6 @@ import {
   IMealsRepository,
   MealSaveParams,
 } from '@/repositories/contracts/i-meals.repository'
-import { Meal } from 'knex/types/tables'
-import { randomUUID } from 'node:crypto'
 
 export class InMemoryMealsRepository implements IMealsRepository {
   private meals: Meal[] = []
@@ -90,5 +91,15 @@ export class InMemoryMealsRepository implements IMealsRepository {
     this.meals[mealIndex] = meal
 
     return MealEntity.fromDatabase(meal)
+  }
+
+  async delete(id: UUID, userId: UUID): Promise<void> {
+    const mealIndex = this.meals.findIndex(
+      (meal) => meal.id === id && meal.user_id === userId,
+    )
+
+    if (mealIndex >= 0) {
+      this.meals.splice(mealIndex, 1)
+    }
   }
 }

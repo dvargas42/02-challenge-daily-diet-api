@@ -33,4 +33,5 @@ export interface IMealsRepository {
   countByUserId(userId: string): Promise<number>
   create(data: CreateParams): Promise<MealEntity>
   save(data: MealSaveParams): Promise<MealEntity>
+  delete(id: UUID, userId: UUID): Promise<void>
 }
