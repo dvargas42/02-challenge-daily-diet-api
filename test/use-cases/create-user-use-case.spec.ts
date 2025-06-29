@@ -13,6 +13,7 @@ describe('Create User Use Case', () => {
     usersRepository = new InMemoryUsersRepository()
     sut = new CreateUserUseCase(usersRepository)
   })
+
   it('should be able to create user', async () => {
     const { user } = await sut.execute({
       name: 'John Doe',
