@@ -1,6 +1,8 @@
+import { MealEntity } from '@/entities/meal-entity'
 import {
   IMealsRepository,
   MealParams,
+  MealSaveParams,
 } from '@/repositories/contracts/i-meals.repository'
 import { Meal } from 'knex/types/tables'
 import { randomUUID } from 'node:crypto'
@@ -49,5 +51,33 @@ export class InMemoryMealsRepository implements IMealsRepository {
     this.meals.push(meal)
 
     return meal
+  }
+
+  async save(data: MealSaveParams): Promise<MealEntity> {
+    let mealIndex: number = -1
+
+    const mealFound = this.meals.find((meal, index) => {
+      if (meal.id === data.id && meal.user_id === data.userId) {
+        mealIndex = index
+        return true
+      }
+      return false
+    }) as Meal
+
+    const meal = {
+      id: mealFound.id,
+      description: data.description,
+      name: data.name,
+      date: data.date,
+      hour: data.hour,
+      is_in_diet: data.isInDiet,
+      user_id: mealFound.user_id,
+      created_at: mealFound.created_at,
+      updated_at: mealFound.updated_at,
+    }
+
+    this.meals[mealIndex] = meal
+
+    return MealEntity.fromDatabase(meal)
   }
 }
