@@ -1,18 +1,21 @@
-import { randomUUID } from 'node:crypto'
+import { UUID } from 'node:crypto'
 
-import { User } from 'knex/types/tables'
+import { EmailAlreadyExistsError } from '@/errors/email-already-exists-error'
 import { IUsersRepository } from '@/repositories/contracts/i-users-repository'
 import { hash } from 'bcryptjs'
-import { EmailAlreadyExistsError } from '@/errors/email-already-exists-error'
 
-type CreateUserUseCaseRequest = {
+type CreateUserInput = {
   name: string
   email: string
   password: string
 }
 
-type CreateUserUseCaseResponse = {
-  user: Omit<User, 'created_at' | 'updated_at'>
+type CreateUserOutput = {
+  user: {
+    id: UUID
+    name: string
+    email: string
+  }
 }
 
 export class CreateUserUseCase {
@@ -22,21 +25,26 @@ export class CreateUserUseCase {
     name,
     email,
     password,
-  }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
-    const doesTheUserAlreadyExist =
+  }: CreateUserInput): Promise<CreateUserOutput> {
+    const doesTheEmailAlreadyExist =
       await this.usersRepository.findByEmail(email)
 
-    if (!doesTheUserAlreadyExist) {
+    if (doesTheEmailAlreadyExist) {
       throw new EmailAlreadyExistsError()
     }
 
     const user = await this.usersRepository.create({
-      id: randomUUID(),
       name,
       email,
       password: await hash(password, 6),
     })
 
-    return { user }
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    }
   }
 }

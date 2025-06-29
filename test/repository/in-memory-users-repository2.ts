@@ -1,38 +1,37 @@
-import { IUsersRepository } from '@/repositories/contracts/i-users-repository'
-import { UUID } from 'crypto'
+import { UserEntity } from '@/entities/user-entity'
+import {
+  CreateParams,
+  IUsersRepository,
+} from '@/repositories/contracts/i-users-repository'
+import { randomUUID, UUID } from 'crypto'
 import { User } from 'knex/types/tables'
 
 export class InMemoryUsersRepository implements IUsersRepository {
   private users: User[] = []
 
-  async findById(id: UUID): Promise<User | null> {
+  async findById(id: UUID): Promise<UserEntity | null> {
     const user = this.users.find((user) => user.id === id)
 
     if (!user) {
       return null
     }
 
-    return user
+    return UserEntity.fromDatabase(user)
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<UserEntity | null> {
     const user = this.users.find((user) => user.email === email)
 
     if (!user) {
       return null
     }
 
-    return user
+    return UserEntity.fromDatabase(user)
   }
 
-  async create({
-    id,
-    email,
-    name,
-    password,
-  }: Omit<User, 'created_at' | 'updated_at'>): Promise<User> {
+  async create({ email, name, password }: CreateParams): Promise<UserEntity> {
     const user = {
-      id,
+      id: randomUUID(),
       name,
       email,
       password,
@@ -42,6 +41,6 @@ export class InMemoryUsersRepository implements IUsersRepository {
 
     this.users.push(user)
 
-    return user
+    return UserEntity.fromDatabase(user)
   }
 }

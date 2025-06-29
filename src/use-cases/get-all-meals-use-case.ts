@@ -3,13 +3,13 @@ import { IMealsRepository } from '@/repositories/contracts/i-meals.repository'
 import { IUsersRepository } from '@/repositories/contracts/i-users-repository'
 import { UUID } from 'node:crypto'
 
-type GetAllMealUseCaseRequest = {
+type GetAllMealInput = {
   userId: UUID
   page: number
   pageSize: number
 }
 
-type GetAllMealUseCaseResponse = {
+type GetAllMealOutput = {
   meals: Record<string, MealReduced[]>
   totalPages: number
   total: number
@@ -39,7 +39,7 @@ export class GetAllMealsUseCase {
     userId,
     page,
     pageSize,
-  }: GetAllMealUseCaseRequest): Promise<GetAllMealUseCaseResponse> {
+  }: GetAllMealInput): Promise<GetAllMealOutput> {
     const user = await this.usersRepository.findById(userId)
 
     if (!user) {
@@ -47,11 +47,11 @@ export class GetAllMealsUseCase {
     }
 
     const total = await this.mealsRepository.countByUserId(userId)
-    const meals = await this.mealsRepository.findByUserId(
+    const meals = await this.mealsRepository.findByUserId({
       userId,
       page,
       pageSize,
-    )
+    })
 
     const mealGrupedByDate = meals.reduce(
       (acc, _meal) => {
@@ -66,7 +66,7 @@ export class GetAllMealsUseCase {
           description: _meal.description,
           date,
           hour: _meal.hour,
-          isInDiet: _meal.is_in_diet,
+          isInDiet: _meal.isInDiet,
         }
         acc[date].push(meal)
         return acc

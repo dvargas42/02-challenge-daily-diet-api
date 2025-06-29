@@ -1,15 +1,20 @@
+import { compare } from 'bcryptjs'
+import { UUID } from 'node:crypto'
+
 import { InvalidCredentialsError } from '@/errors/invalid-credentials-error'
 import { IUsersRepository } from '@/repositories/contracts/i-users-repository'
-import { compare } from 'bcryptjs'
-import { User } from 'knex/types/tables'
 
-type AuthenticateUseCaseRequest = {
+type AuthenticateInput = {
   email: string
   password: string
 }
 
-type AuthenticateUseCaseResponse = {
-  user: User
+type AuthenticateUseOutput = {
+  user: {
+    id: UUID
+    name: string
+    email: string
+  }
 }
 
 export class AuthenticateUseCase {
@@ -18,7 +23,7 @@ export class AuthenticateUseCase {
   async excute({
     email,
     password,
-  }: AuthenticateUseCaseRequest): Promise<AuthenticateUseCaseResponse> {
+  }: AuthenticateInput): Promise<AuthenticateUseOutput> {
     const user = await this.usersRepository.findByEmail(email)
 
     if (!user) {
@@ -31,6 +36,12 @@ export class AuthenticateUseCase {
       throw new InvalidCredentialsError()
     }
 
-    return { user }
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    }
   }
 }

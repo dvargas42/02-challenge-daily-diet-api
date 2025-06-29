@@ -13,6 +13,7 @@ describe('Create User Use Case', () => {
     usersRepository = new InMemoryUsersRepository()
     sut = new CreateUserUseCase(usersRepository)
   })
+
   it('should be able to create user', async () => {
     const { user } = await sut.execute({
       name: 'John Doe',
@@ -23,8 +24,14 @@ describe('Create User Use Case', () => {
     expect(user.id).toEqual(expect.any(String))
     expect(user).toEqual(
       expect.objectContaining({
+        id: user.id,
         name: 'John Doe',
         email: 'johndoe@example.com',
+      }),
+    )
+    expect(user).not.toEqual(
+      expect.objectContaining({
+        password: expect.any(String),
       }),
     )
   })

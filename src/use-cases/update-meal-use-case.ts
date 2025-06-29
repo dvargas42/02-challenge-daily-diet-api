@@ -1,10 +1,10 @@
-import type { UUID } from 'node:crypto'
+import { UUID } from 'node:crypto'
 
 import { ResourceNotFoundError } from '@/errors/resource-not-found-error'
 import { IMealsRepository } from '@/repositories/contracts/i-meals.repository'
-import { IUsersRepository } from '@/repositories/contracts/i-users-repository'
 
-type CreateMealInput = {
+type UpdateMealInput = {
+  id: UUID
   name: string
   description: string
   date: string
@@ -13,7 +13,7 @@ type CreateMealInput = {
   userId: UUID
 }
 
-type CreateMealsOutput = {
+type UpdateMealOutput = {
   meal: {
     id: UUID
     name: string
@@ -23,21 +23,18 @@ type CreateMealsOutput = {
     isInDiet: boolean
   }
 }
+export class UpdateMealUseCase {
+  constructor(private mealsRepository: IMealsRepository) {}
 
-export class CreateMealUseCase {
-  constructor(
-    private mealsRepository: IMealsRepository,
-    private usersRepository: IUsersRepository,
-  ) {}
+  async execute(data: UpdateMealInput): Promise<UpdateMealOutput> {
+    const doesTheMealAlreadyExists =
+      await this.mealsRepository.findByIdAndUserId(data.id, data.userId)
 
-  async execute(data: CreateMealInput): Promise<CreateMealsOutput> {
-    const user = await this.usersRepository.findById(data.userId)
-
-    if (!user) {
+    if (!doesTheMealAlreadyExists) {
       throw new ResourceNotFoundError()
     }
 
-    const meal = await this.mealsRepository.create(data)
+    const meal = await this.mealsRepository.save(data)
 
     return {
       meal: {
