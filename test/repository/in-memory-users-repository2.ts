@@ -1,5 +1,9 @@
-import { IUsersRepository } from '@/repositories/contracts/i-users-repository'
-import { UUID } from 'crypto'
+import { UserEntity } from '@/entities/user-entity'
+import {
+  CreateParams,
+  IUsersRepository,
+} from '@/repositories/contracts/i-users-repository'
+import { randomUUID, UUID } from 'crypto'
 import { User } from 'knex/types/tables'
 
 export class InMemoryUsersRepository implements IUsersRepository {
@@ -25,14 +29,9 @@ export class InMemoryUsersRepository implements IUsersRepository {
     return user
   }
 
-  async create({
-    id,
-    email,
-    name,
-    password,
-  }: Omit<User, 'created_at' | 'updated_at'>): Promise<User> {
+  async create({ email, name, password }: CreateParams): Promise<UserEntity> {
     const user = {
-      id,
+      id: randomUUID(),
       name,
       email,
       password,
@@ -42,6 +41,6 @@ export class InMemoryUsersRepository implements IUsersRepository {
 
     this.users.push(user)
 
-    return user
+    return UserEntity.fromDatabase(user)
   }
 }
