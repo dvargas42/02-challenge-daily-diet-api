@@ -14,6 +14,7 @@ export const config: Knex.Config = {
     extension: 'ts',
     directory: './db/migrations',
   },
+  searchPath: [env.DATABASE_SCHEMA],
 }
 
 export const knex = setupKnex(config)

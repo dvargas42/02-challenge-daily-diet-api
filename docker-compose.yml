@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: bitnami/postgresql:17
+    container_name: daily-diet-db
+    restart: unless-stopped
+    environment:
+      POSTGRESQL_PASSWORD: docker
+      POSTGRESQL_USERNAME: docker
+      POSTGRESQL_DATABASE: daily-diet-db
+    ports:
+      - 5432:5432
+    # volumes:
+    #   - ./docker/postgres_data:/bitnami/postgresql
+    networks:
+      - daily-network
+    expose:
+      - 5432
+
+networks:
+  daily-network:
+    driver: bridge
