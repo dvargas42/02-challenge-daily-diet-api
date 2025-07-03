@@ -9,7 +9,6 @@ export async function createUserController(
 ) {
   const requestBody = createUserValidation(request.body)
   const createUserUseCase = makeCreateUserUseCase()
-
   await createUserUseCase.execute(requestBody)
 
   return reply.status(201).send()
