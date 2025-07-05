@@ -3,7 +3,7 @@ import { randomUUID, UUID } from 'node:crypto'
 
 import { knex } from '../database'
 import { verifyJWT } from '../middleware/verify-jwt'
-import { mealCreateValidation } from '../controllers/meals/schema/mealCreateValidation'
+import { mealCreateValidation } from '../controllers/meals/schema/create-meal-validation'
 import { mealListAllValidation } from './schemas/meal-list-all.schema'
 
 type Meal = {

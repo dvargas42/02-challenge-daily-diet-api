@@ -1,14 +1,14 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 
 import { makeCreateMealUseCase } from '@/use-cases/factories/make-create-meal-use-case'
-import { mealCreateValidation } from './schema/mealCreateValidation'
+import { createMealValidation } from './schema/create-meal-validation'
 
 export async function createMealController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   const userId = request.user.sub
-  const { name, description, date, hour, isInDiet } = mealCreateValidation(
+  const { name, description, date, hour, isInDiet } = createMealValidation(
     request.body,
   )
   const createMealUseCase = makeCreateMealUseCase()

@@ -1,27 +1,16 @@
-import { MealsRepository } from '@/repositories/meals-repository'
-import { UsersRepository } from '@/repositories/users-repository'
-import { GetAllMealsUseCase } from '@/use-cases/get-all-meals-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { z } from 'zod'
+
+import { getAllMealValidation } from './schema/get-all-meal-validation'
+import { makeGetAllMealsUseCase } from '@/use-cases/factories/make-get-all-meals-use-case'
 
 export async function getAllMealsController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const getAllMealSchema = z.object({
-    page: z.coerce.number(),
-    pageSize: z.coerce.number(),
-  })
-
   const userId = request.user.sub
-  const { page, pageSize } = getAllMealSchema.parse(request.query)
+  const { page, pageSize } = getAllMealValidation(request.query)
 
-  const usersRepository = new UsersRepository()
-  const mealsRepository = new MealsRepository()
-  const getAllMealsUseCase = new GetAllMealsUseCase(
-    mealsRepository,
-    usersRepository,
-  )
+  const getAllMealsUseCase = makeGetAllMealsUseCase()
 
   const meals = await getAllMealsUseCase.execute({
     userId,
