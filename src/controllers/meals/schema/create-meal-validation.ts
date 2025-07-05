@@ -34,7 +34,7 @@ function parseToIsoTime(time: string) {
   return `${hourNum.toString().padStart(2, '0')}:${minuteNum.toString().padStart(2, '0')}`
 }
 
-const mealCreateSchema = z.object({
+const createMealSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters long'),
   description: z
     .string()
@@ -50,4 +50,4 @@ const mealCreateSchema = z.object({
   isInDiet: z.boolean(),
 })
 
-export const mealCreateValidation = mealCreateSchema.parse
+export const createMealValidation = createMealSchema.parse

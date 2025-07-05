@@ -1,21 +1,16 @@
-import { MealsRepository } from '@/repositories/meals-repository'
-import { GetMealUseCase } from '@/use-cases/get-meal-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { z } from 'zod'
+
+import { makeGetMealUseCase } from '@/use-cases/factories/make-get-meal-use-case'
+import { getMealValidation } from './schema/get-meal-validation'
 
 export async function getMealController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const getMealSchema = z.object({
-    id: z.string(),
-  })
-
-  const { id } = getMealSchema.parse(request.params)
+  const { id } = getMealValidation(request.params)
   const userId = request.user.sub
 
-  const mealsRespository = new MealsRepository()
-  const getMealUseCase = new GetMealUseCase(mealsRespository)
+  const getMealUseCase = makeGetMealUseCase()
 
   const { meal } = await getMealUseCase.execute({ id, userId })
 
