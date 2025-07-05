@@ -26,8 +26,20 @@ export class MealsRepository implements IMealsRepository {
     return meals.map((meal) => MealEntity.fromDatabase(meal))
   }
 
-  findByIdAndUserId(id: string, userId: string): Promise<MealEntity | null> {
-    throw new Error('Method not implemented.')
+  async findByIdAndUserId(id: UUID, userId: UUID): Promise<MealEntity | null> {
+    const meal = await knex('meals')
+      .where({
+        user_id: userId,
+        id,
+      })
+      .returning('*')
+      .first()
+
+    if (!meal) {
+      return null
+    }
+
+    return MealEntity.fromDatabase(meal)
   }
 
   findByUserIdOrderByDateDescAndHourDesc(userId: UUID): Promise<MealEntity[]> {

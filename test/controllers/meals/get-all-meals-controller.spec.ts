@@ -36,7 +36,6 @@ describe('Get All Meals (E2E)', () => {
       })
       .set('Authorization', `Bearer ${token}`)
       .send()
-    console.log(response.body.meals.meals)
 
     expect(response.statusCode).toBe(200)
     expect(response.body.meals.total).toBe(22)
