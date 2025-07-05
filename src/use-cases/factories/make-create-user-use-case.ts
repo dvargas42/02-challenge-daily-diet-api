@@ -1,4 +1,4 @@
-import { UsersRepository } from '@/repositories/usersRepository'
+import { UsersRepository } from '@/repositories/users-repository'
 import { CreateUserUseCase } from '../create-user-use-case'
 
 export function makeCreateUserUseCase() {

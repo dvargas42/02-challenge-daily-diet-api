@@ -47,10 +47,21 @@ export class GetAllMealsUseCase {
     }
 
     const total = await this.mealsRepository.countByUserId(userId)
-    const meals = await this.mealsRepository.findByUserId({
+    const foundMeals = await this.mealsRepository.findByUserId({
       userId,
       page,
       pageSize,
+    })
+
+    const meals = foundMeals.map((meal) => {
+      return {
+        id: meal.id,
+        name: meal.name,
+        description: meal.description,
+        date: meal.date.toISOString().slice(0, 10),
+        hour: meal.hour.slice(0, 5),
+        isInDiet: meal.isInDiet,
+      }
     })
 
     const mealGrupedByDate = meals.reduce(
@@ -77,7 +88,7 @@ export class GetAllMealsUseCase {
     return {
       meals: mealGrupedByDate,
       totalPages: Math.ceil(total / pageSize),
-      total,
+      total: Number(total),
     }
   }
 }

@@ -1,4 +1,4 @@
-import { UsersRepository } from '@/repositories/usersRepository'
+import { UsersRepository } from '@/repositories/users-repository'
 import { AuthenticateUseCase } from '../authenticate-use-case'
 
 export function makeAuthenticateUseCase() {

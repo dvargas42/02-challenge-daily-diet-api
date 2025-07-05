@@ -16,8 +16,8 @@ declare module 'knex/types/tables' {
     id: UUID
     name: string
     description: string
-    date: string
-    hour: string
+    date: Date
+    hour: Time
     is_in_diet: boolean
     user_id: UUID
     created_at: string
