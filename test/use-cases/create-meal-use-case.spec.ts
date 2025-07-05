@@ -35,7 +35,7 @@ describe('Create Meals Use Case', () => {
     const mealIn = {
       name: 'Caeser Salad',
       description: 'Salad with fresh vegetables...',
-      date: '15/06/2025',
+      date: new Date('2025-06-01'),
       hour: '10:10',
       isInDiet: true,
       userId: user.id,
@@ -47,8 +47,9 @@ describe('Create Meals Use Case', () => {
       expect.objectContaining({
         name: 'Caeser Salad',
         description: 'Salad with fresh vegetables...',
-        date: '15/06/2025',
+        date: '2025-06-01',
         hour: '10:10',
+        isInDiet: true,
       }),
     )
   })
@@ -58,7 +59,7 @@ describe('Create Meals Use Case', () => {
       sut.execute({
         name: 'Caeser Salad',
         description: 'Salad with fresh vegetables...',
-        date: '15/06/2025',
+        date: new Date('2025-06-01'),
         hour: '10:10',
         isInDiet: true,
         userId: '5dff9623-dd59-47a2-b988-ed5b0af5c86b' as UUID,

@@ -1,12 +1,13 @@
-import { Meal } from 'knex/types/tables'
 import { UUID } from 'node:crypto'
+
+import { Meal } from 'knex/types/tables'
 
 export class MealEntity {
   constructor(
     public id: UUID,
     public name: string,
     public description: string,
-    public date: string,
+    public date: Date,
     public hour: string,
     public isInDiet: boolean,
     public userId: UUID,

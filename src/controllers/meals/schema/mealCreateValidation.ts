@@ -1,7 +1,8 @@
+import { InvalidDateError } from '@/errors/invalid-date-error'
 import { z } from 'zod'
 
 function parseToIsoDate(date: string) {
-  const [day, month, year] = date.split('/')
+  const [year, month, day] = date.split('-')
 
   const dayNum = parseInt(day, 10)
   const monthNum = parseInt(month, 10) - 1
@@ -14,10 +15,10 @@ function parseToIsoDate(date: string) {
     _date.getMonth() !== monthNum ||
     _date.getFullYear() !== yearNum
   ) {
-    throw new Error('Invalid date')
+    throw new InvalidDateError()
   }
 
-  return _date.toISOString().slice(0, 10)
+  return _date
 }
 
 function parseToIsoTime(time: string) {
@@ -40,7 +41,7 @@ const mealCreateSchema = z.object({
     .min(2, 'Description must be at least 2 characters long'),
   date: z
     .string()
-    .regex(/^\d{2}\/\d{2}\/\d{4}$/, 'Date must be in format dd/MM/yyyy')
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in format yyyy-MM-dd')
     .transform((date) => parseToIsoDate(date)),
   hour: z
     .string()

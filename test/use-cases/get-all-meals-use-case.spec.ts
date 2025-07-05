@@ -40,12 +40,13 @@ describe('Get All Meals Use Case', () => {
       await createMealUseCase.execute({
         name: `TypeScript salad ${i}`,
         description: 'Anything description...',
-        date: i < 10 ? `2025-06-0${i}` : `2025-06-${i}`,
+        date: i < 10 ? new Date(`2025-06-0${i}`) : new Date(`2025-06-${i}`),
         hour: i < 10 ? `0${i}:59` : `${i}:59`,
         isInDiet: true,
         userId: user.id,
       })
     }
+
     const { meals, total, totalPages } = await sut.execute({
       userId: user.id,
       page: 2,
@@ -57,8 +58,8 @@ describe('Get All Meals Use Case', () => {
     expect(Object.keys(meals).length).toEqual(2)
     expect(meals).toEqual(
       expect.objectContaining({
-        '21.06.2025': meals['21.06.2025'],
-        '22.06.2025': meals['22.06.2025'],
+        '2025-06-21': meals['2025-06-21'],
+        '2025-06-22': meals['2025-06-22'],
       }),
     )
   })

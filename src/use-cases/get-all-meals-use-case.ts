@@ -24,11 +24,6 @@ type MealReduced = {
   isInDiet: boolean
 }
 
-function parseDate(date: string) {
-  const [year, month, day] = date.split('-')
-  return `${day}.${month}.${year}`
-}
-
 export class GetAllMealsUseCase {
   constructor(
     private mealsRepository: IMealsRepository,
@@ -47,15 +42,26 @@ export class GetAllMealsUseCase {
     }
 
     const total = await this.mealsRepository.countByUserId(userId)
-    const meals = await this.mealsRepository.findByUserId({
+    const foundMeals = await this.mealsRepository.findByUserId({
       userId,
       page,
       pageSize,
     })
 
+    const meals = foundMeals.map((meal) => {
+      return {
+        id: meal.id,
+        name: meal.name,
+        description: meal.description,
+        date: meal.date.toISOString().slice(0, 10),
+        hour: meal.hour.slice(0, 5),
+        isInDiet: meal.isInDiet,
+      }
+    })
+
     const mealGrupedByDate = meals.reduce(
       (acc, _meal) => {
-        const date = parseDate(_meal.date)
+        const date = _meal.date
 
         if (!acc[date]) {
           acc[date] = []
@@ -77,7 +83,7 @@ export class GetAllMealsUseCase {
     return {
       meals: mealGrupedByDate,
       totalPages: Math.ceil(total / pageSize),
-      total,
+      total: Number(total),
     }
   }
 }
