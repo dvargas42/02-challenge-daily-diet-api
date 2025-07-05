@@ -7,7 +7,7 @@ import { IUsersRepository } from '@/repositories/contracts/i-users-repository'
 type CreateMealInput = {
   name: string
   description: string
-  date: string
+  date: Date
   hour: string
   isInDiet: boolean
   userId: UUID
@@ -44,8 +44,8 @@ export class CreateMealUseCase {
         id: meal.id,
         name: meal.name,
         description: meal.description,
-        date: meal.date,
-        hour: meal.hour,
+        date: meal.date.toISOString().slice(0, 10),
+        hour: meal.hour.slice(0, 5),
         isInDiet: meal.isInDiet,
       },
     }

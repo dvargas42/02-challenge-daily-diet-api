@@ -21,7 +21,7 @@ describe('Get Meal (E2E)', () => {
       .send({
         name: 'TypeScript Salad',
         description: 'Anything description...',
-        date: '01/06/2025',
+        date: '2025-06-01',
         hour: '10:10',
         isInDiet: true,
       })

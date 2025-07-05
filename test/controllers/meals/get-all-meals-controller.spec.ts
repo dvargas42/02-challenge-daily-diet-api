@@ -22,7 +22,7 @@ describe('Get All Meals (E2E)', () => {
         .send({
           name: `TypeScript Salad ${i}`,
           description: 'Anything description...',
-          date: i < 10 ? `0${i}/06/2025` : `${i}/06/2025`,
+          date: i < 10 ? `2025-06-0${i}` : `2025-06-${i}`,
           hour: i < 10 ? `0${i}:10` : `${i}:10`,
           isInDiet: true,
         })
@@ -42,24 +42,24 @@ describe('Get All Meals (E2E)', () => {
     expect(response.body.meals.totalPages).toBe(2)
     expect(response.body.meals.meals).toEqual(
       expect.objectContaining({
-        '02.06.2025': expect.arrayContaining([
+        '2025-06-01': expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            name: 'TypeScript Salad 1',
+            description: 'Anything description...',
+            date: '2025-06-01',
+            hour: '01:10',
+            isInDiet: true,
+          }),
+        ]),
+        '2025-06-02': expect.arrayContaining([
           expect.objectContaining({
             id: expect.any(String),
             name: 'TypeScript Salad 2',
             description: 'Anything description...',
-            date: '02.06.2025',
+            date: '2025-06-02',
             hour: '02:10',
             isInDiet: true,
-          }),
-        ]),
-        '01.06.2025': expect.arrayContaining([
-          expect.objectContaining({
-            id: expect.any(String),
-            date: '01.06.2025',
-            description: 'Anything description...',
-            hour: '01:10',
-            isInDiet: true,
-            name: 'TypeScript Salad 1',
           }),
         ]),
       }),

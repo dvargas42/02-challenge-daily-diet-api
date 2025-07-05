@@ -24,11 +24,6 @@ type MealReduced = {
   isInDiet: boolean
 }
 
-function parseDate(date: string) {
-  const [year, month, day] = date.split('-')
-  return `${day}.${month}.${year}`
-}
-
 export class GetAllMealsUseCase {
   constructor(
     private mealsRepository: IMealsRepository,
@@ -66,7 +61,7 @@ export class GetAllMealsUseCase {
 
     const mealGrupedByDate = meals.reduce(
       (acc, _meal) => {
-        const date = parseDate(_meal.date)
+        const date = _meal.date
 
         if (!acc[date]) {
           acc[date] = []

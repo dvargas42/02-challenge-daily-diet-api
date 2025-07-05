@@ -23,13 +23,6 @@ export async function createMealController(
   })
 
   return reply.status(201).send({
-    meal: {
-      id: meal.id,
-      name: meal.name,
-      description: meal.description,
-      date: new Date(meal.date).toISOString().slice(0, 10),
-      hour: meal.hour.slice(0, 5),
-      isInDiet: meal.isInDiet,
-    },
+    meal,
   })
 }

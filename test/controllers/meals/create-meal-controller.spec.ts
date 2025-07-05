@@ -11,6 +11,7 @@ describe('Create Meal (E2E)', () => {
   afterAll(async () => {
     await app.close()
   })
+
   it('should be able to create meal', async () => {
     const { token } = await createAndAuthenticateUser(app)
 
@@ -20,7 +21,7 @@ describe('Create Meal (E2E)', () => {
       .send({
         name: 'TypeScript Salad',
         description: 'Anything description...',
-        date: '01/06/2025',
+        date: '2025-06-01',
         hour: '10:10',
         isInDiet: true,
       })
