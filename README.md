@@ -4,10 +4,10 @@
 <a href="https://www.linkedin.com/in/daniel-santos-040983ab/" target="_blank" rel="noopener noreferrer">
 ![Made by](https://img.shields.io/badge/made%20by-daniel%20vargas-%23177edf)
 </a>
-![Repository size](https://img.shields.io/github/repo-size/dvargas42/02-challenge-daily-diet-api?color=%23177edf)
-![GitHub last commit](https://img.shields.io/github/last-commit/dvargas42/02-challenge-daily-diet-api?color=%23177edf)
-![Repository issues](https://img.shields.io/github/issues/dvargas42/02-challenge-daily-diet-api?color=%23177edf)
-![GitHub](https://img.shields.io/github/license/dvargas42/02-challenge-daily-diet-api?color=%23177edf)
+![Repository size](https://img.shields.io/github/repo-size/dvargas42/daily-diet-api?color=%23177edf)
+![GitHub last commit](https://img.shields.io/github/last-commit/dvargas42/daily-diet-api?color=%23177edf)
+![Repository issues](https://img.shields.io/github/issues/dvargas42/daily-diet-api?color=%23177edf)
+![GitHub](https://img.shields.io/github/license/dvargas42/daily-diet-api?color=%23177edf)
 
 # 
 
@@ -21,9 +21,11 @@ Technologies used in this project:
 - [TypeScript](https://www.typescriptlang.org/)
 - [Fastify](https://www.fastify.io/)
 - [Knex.js](https://knexjs.org/)
-- [SQLite](https://www.sqlite.org/)
+- [PostgreSQL](https://www.postgresql.org/) 
 - [Zod](https://zod.dev/)
 - [Vitest](https://vitest.dev/)
+- [ESLint](https://eslint.org/)
+- [Prettier](https://prettier.io/)
 
 ## 📋 Features
 
@@ -59,13 +61,13 @@ The API offers the following features:
 Clone the project:
 
 ```bash
-git clone https://github.com/dvargas42/02-challenge-daily-diet-api
+git clone https://github.com/dvargas42/daily-diet-api
 ```
 
 Enter the project directory:
 
 ```bash
-cd 02-challenge-daily-diet-api
+cd daily-diet-api
 ```
 
 Install dependencies:
@@ -83,22 +85,41 @@ npm run knex -- migrate:latest
 Start the development server:
 
 ```bash
-npm run dev
+npm run start:dev
 ```
 
 ## 🧪 Testing
 
-To run tests:
+To run unit tests:
 
 ```bash
-npm test
+npm test:unit
 ```
 
-To run tests in watch mode:
+To run unit tests in watch mode:
 
 ```bash
-npm run test:watch
+npm run test:unit:watch
 ```
+
+To run e2e tests:
+
+```bash
+npm test:e2e
+```
+
+To run e2e tests in watch mode:
+
+```bash
+npm run test:e2e:watch
+```
+
+To run tests coverage
+
+```bash
+npm run test:coverage
+```
+
 
 ## 🔍 How to use
 
@@ -125,14 +146,14 @@ http://localhost:3333
 **Make a fork of this repository**
 
 ```bash
-gh repo fork dvargas42/02-challenge-daily-diet-api
+gh repo fork dvargas42/daily-diet-api
 ```
 
 **Follow the steps below**
 
 ```bash
 # Clone your fork
-git clone your-fork-url && cd 02-challenge-daily-diet-api
+git clone your-fork-url && cd daily-diet-api
 
 # Create a branch with your feature
 git checkout -b my-feature
