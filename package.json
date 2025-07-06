@@ -11,7 +11,9 @@
     "test:unit": "vitest run --project unit",
     "test:unit:watch": "vitest --project unit",
     "test:e2e": "vitest run --project e2e",
-    "test:e2e:watch": "vitest --project e2e"
+    "test:e2e:watch": "vitest --project e2e",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui"
   },
   "keywords": [],
   "author": "",
