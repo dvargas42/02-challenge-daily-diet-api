@@ -101,8 +101,30 @@ export class MealsRepository implements IMealsRepository {
     return MealEntity.fromDatabase(meal)
   }
 
-  save(data: MealSaveParams): Promise<MealEntity> {
-    throw new Error('Method not implemented.')
+  async save({
+    id,
+    name,
+    description,
+    date,
+    hour,
+    isInDiet,
+    userId,
+  }: MealSaveParams): Promise<MealEntity> {
+    const [meal] = await knex('meals')
+      .update({
+        name,
+        description,
+        date,
+        hour,
+        is_in_diet: isInDiet,
+      })
+      .where({
+        user_id: userId,
+        id,
+      })
+      .returning('*')
+
+    return MealEntity.fromDatabase(meal)
   }
 
   async delete(id: UUID, userId: UUID): Promise<void> {
