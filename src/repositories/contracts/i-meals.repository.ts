@@ -21,7 +21,7 @@ export type MealSaveParams = {
   id: UUID
   name: string
   description: string
-  date: string
+  date: Date
   hour: string
   isInDiet: boolean
   userId: UUID

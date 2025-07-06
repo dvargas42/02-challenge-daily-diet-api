@@ -42,8 +42,18 @@ export class MealsRepository implements IMealsRepository {
     return MealEntity.fromDatabase(meal)
   }
 
-  findByUserIdOrderByDateDescAndHourDesc(userId: UUID): Promise<MealEntity[]> {
-    throw new Error('Method not implemented.')
+  async findByUserIdOrderByDateDescAndHourDesc(
+    userId: UUID,
+  ): Promise<MealEntity[]> {
+    const meals = await knex('meals')
+      .where({
+        user_id: userId,
+      })
+      .select('*')
+      .orderBy('date', 'desc')
+      .orderBy('hour', 'desc')
+
+    return meals.map((meal) => MealEntity.fromDatabase(meal))
   }
 
   async countByUserId(userId: string): Promise<number> {
@@ -54,8 +64,18 @@ export class MealsRepository implements IMealsRepository {
     return total
   }
 
-  countByUserIdAndIsInDiet(userId: UUID, isInDiet: boolean): Promise<number> {
-    throw new Error('Method not implemented.')
+  async countByUserIdAndIsInDiet(
+    userId: UUID,
+    isInDiet: boolean,
+  ): Promise<number> {
+    const [{ total }] = (await knex('meals')
+      .where({
+        user_id: userId,
+        is_in_diet: isInDiet,
+      })
+      .count('* as total')) as [{ total: string }]
+
+    return parseInt(total, 10)
   }
 
   async create({
@@ -81,11 +101,33 @@ export class MealsRepository implements IMealsRepository {
     return MealEntity.fromDatabase(meal)
   }
 
-  save(data: MealSaveParams): Promise<MealEntity> {
-    throw new Error('Method not implemented.')
+  async save({
+    id,
+    name,
+    description,
+    date,
+    hour,
+    isInDiet,
+    userId,
+  }: MealSaveParams): Promise<MealEntity> {
+    const [meal] = await knex('meals')
+      .update({
+        name,
+        description,
+        date,
+        hour,
+        is_in_diet: isInDiet,
+      })
+      .where({
+        user_id: userId,
+        id,
+      })
+      .returning('*')
+
+    return MealEntity.fromDatabase(meal)
   }
 
-  delete(id: UUID, userId: UUID): Promise<void> {
-    throw new Error('Method not implemented.')
+  async delete(id: UUID, userId: UUID): Promise<void> {
+    await knex('meals').where({ id, user_id: userId }).delete()
   }
 }
